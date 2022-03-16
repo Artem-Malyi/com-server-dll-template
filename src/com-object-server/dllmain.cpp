@@ -6,12 +6,16 @@
 #define LOG_PREFIX "[ADDOBJ-DLLMAIN]"
 #include "logger.h"
 
+long g_nComObjectsInUse = 0;
+
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
 {
     LOG("Entering, hModule: 0x%p, ul_reason_for_call: 0x%08x, lpReseved: 0x%p");
     switch (ul_reason_for_call)
     {
     case DLL_PROCESS_ATTACH:
+        g_nComObjectsInUse = 0;
+        break;
     case DLL_THREAD_ATTACH:
     case DLL_THREAD_DETACH:
     case DLL_PROCESS_DETACH:

@@ -19,33 +19,33 @@ CAddObjFactory::CAddObjFactory() : m_nRefCount(0) {}
 //
 // IUnknown interface implementation
 //
-HRESULT __stdcall CAddObjFactory::QueryInterface(REFIID riid, void** ppObj)
+HRESULT __stdcall CAddObjFactory::QueryInterface(REFIID riid, void** ppvObject)
 {
     LOG("Entering");
 
     WCHAR wsIID[GUID_STRING_LENGTH] = { 0 };
     BOOL bRes = GuidToWideString((LPGUID)&riid, wsIID, GUID_STRING_LENGTH);
-    if (!bRes || !ppObj || !*ppObj)
+    if (!bRes || !ppvObject || !*ppvObject)
         return E_INVALIDARG;
 
-    LOG("IID: %s, ppObj: 0x%p, pObj: 0x%p", wsIID, ppObj, *ppObj);
+    LOG("IID: %s, ppvObject: 0x%p, pvObject: 0x%p", wsIID, ppvObject, *ppvObject);
 
     if (riid == IID_IUnknown) {
-        *ppObj = static_cast<void*>(this);
+        *ppvObject = static_cast<void*>(this);
         AddRef();
         LOG("Query for IUnknown, refCount: %d", m_nRefCount);
         return S_OK;
     }
 
     if (riid == IID_IClassFactory) {
-        *ppObj = static_cast<void*>(this);
+        *ppvObject = static_cast<void*>(this);
         AddRef();
         LOG("Query for IClassFactory, refCount: %d", m_nRefCount);
         return S_OK;
     }
 
     LOG("Not supported interface: %s", wsIID);
-    *ppObj = nullptr;
+    *ppvObject = nullptr;
     return E_NOINTERFACE;
 }
 
@@ -100,7 +100,7 @@ HRESULT __stdcall CAddObjFactory::CreateInstance(_In_opt_ IUnknown* pUnkOuter, _
     //
     // Get the requested interface
     //
-    LOG("Created instance: 0x%p, now requesting interface %s", pObject, wsIID);
+    LOG("Created CAddObj instance: 0x%p, now requesting interface %s", pObject, wsIID);
     return pObject->QueryInterface(riid, ppvObject);
 }
 

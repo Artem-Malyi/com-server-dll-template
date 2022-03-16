@@ -23,5 +23,11 @@ library SuperFastMathLib
     importlib("stdole32.tlb");
     importlib("stdole2.tlb");
 
-    interface IAdd;
+    [
+        uuid(3A6B1C36-7189-4C3C-9D08-82707C9992C8)
+    ]
+    coclass AddObject
+    {
+        [default] interface IAdd;
+    };
 }
