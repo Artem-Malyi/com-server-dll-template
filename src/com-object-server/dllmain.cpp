@@ -3,7 +3,7 @@
 
 #define DEBUG_LOGGER_ENABLED
 #define FILE_LOGGER_ENABLED
-#define LOG_PREFIX "[COM-OBJ]"
+#define LOG_PREFIX "[COM-DLLMAIN]"
 #include "logger.h"
 
 BOOL APIENTRY DllMain( HMODULE hModule,
