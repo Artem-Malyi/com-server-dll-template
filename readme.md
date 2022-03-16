@@ -1,0 +1,1 @@
+# COM object template

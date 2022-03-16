@@ -1,0 +1,27 @@
+//import "oaidl.idl";
+//import "ocidl.idl";
+import "unknwn.idl";
+
+[
+    object,
+    uuid(FFBE6296-EA78-488A-AD5D-8FA1F279DE4D),
+    helpstring("Interface IAdd is used for implementing a SuperFast addition algorithm.")
+]
+interface IAdd: IUnknown
+{
+    HRESULT SetFirstNumber(long nX1);
+    HRESULT SetSecondNumber(long nX2);
+    HRESULT PerformAddition([out,retval] long* pSum);
+};
+
+[
+    uuid(FB637D59-3D5F-4060-8E6F-AAC45E96EE4A),
+    helpstring("Interfaces for SuperFast math lib.")
+]
+library SuperFastMathLib 
+{
+    importlib("stdole32.tlb");
+    importlib("stdole2.tlb");
+
+    interface IAdd;
+}
