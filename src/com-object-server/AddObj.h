@@ -1,6 +1,6 @@
 //
 // AddObj.h
-// Contains the C++ class declarations for the IAdd interface
+// Contains the C++ class declaration for the IAdd interface
 //
 #pragma once
 #include "IAdd_h.h" // Contains the C++ style interface declarations.
@@ -10,6 +10,8 @@ extern long g_nComObjectsInUse;
 class CAddObj: public IAdd
 {
 public:
+    CAddObj();
+
     // IUnknown interface
     HRESULT __stdcall QueryInterface(REFIID riid, void** ppObj);
     ULONG   __stdcall AddRef();

@@ -3,13 +3,10 @@
 
 #define DEBUG_LOGGER_ENABLED
 #define FILE_LOGGER_ENABLED
-#define LOG_PREFIX "[COM-DLLMAIN]"
+#define LOG_PREFIX "[ADDOBJ-DLLMAIN]"
 #include "logger.h"
 
-BOOL APIENTRY DllMain( HMODULE hModule,
-                       DWORD  ul_reason_for_call,
-                       LPVOID lpReserved
-                     )
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
 {
     LOG("Entering, hModule: 0x%p, ul_reason_for_call: 0x%08x, lpReseved: 0x%p");
     switch (ul_reason_for_call)

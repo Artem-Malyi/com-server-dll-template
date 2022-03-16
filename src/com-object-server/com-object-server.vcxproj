@@ -209,10 +209,12 @@
     <ClInclude Include="AddObj.h" />
     <ClInclude Include="..\common\framework.h" />
     <ClInclude Include="..\common\pch.h" />
+    <ClInclude Include="AddObjFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\logger.cpp" />
     <ClCompile Include="AddObj.cpp" />
+    <ClCompile Include="AddObjFactory.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="..\common\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

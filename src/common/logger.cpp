@@ -1,7 +1,5 @@
 #include "..\common\pch.h"
 
-#include <Windows.h>
-
 #include "logger.h"
 
 #pragma warning(disable:4996)
@@ -84,6 +82,34 @@ BOOL __GetUniqueTempPath(PWSTR wsTempFilePath, size_t tempFilePathLen)
     WCHAR wsTempPath[MAX_PATH] = {0};
     wcsncpy(wsTempFilePath, wsKnownFolderPath, MAX_PATH);
     CoTaskMemFree(wsKnownFolderPath);
+
+    return TRUE;
+}
+
+//
+// Helper functions
+//
+BOOL GuidToWideString(_In_ LPGUID lpGuid, _Inout_ PWSTR wsGuidBuffer, _In_ SIZE_T wsGuidBufferSize)
+{
+    if (!lpGuid || !wsGuidBuffer || wsGuidBufferSize <= 0)
+        return FALSE;
+
+    HRESULT hr = StringCchPrintfW(
+        wsGuidBuffer, wsGuidBufferSize, L"%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+        lpGuid->Data1,
+        lpGuid->Data2,
+        lpGuid->Data3,
+        lpGuid->Data4[0],
+        lpGuid->Data4[1],
+        lpGuid->Data4[2],
+        lpGuid->Data4[3],
+        lpGuid->Data4[4],
+        lpGuid->Data4[5],
+        lpGuid->Data4[6],
+        lpGuid->Data4[7]
+    );
+    if (FAILED(hr))
+        return FALSE;
 
     return TRUE;
 }

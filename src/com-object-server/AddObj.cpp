@@ -1,23 +1,23 @@
 //
 // AddObj.cpp
-// Contains the implementations of IUnknown and IAdd interfaces
+// Contains the implementation of IUnknown and IAdd interfaces
 //
 #include "..\common\pch.h"
-#include "objbase.h"
 #include "AddObj.h"
 #include "IAdd_i.c" // Contains the interface IIDs
-#include "strsafe.h"
 
 #define DEBUG_LOGGER_ENABLED
 #define FILE_LOGGER_ENABLED
 #define LOG_PREFIX "[COM-ADDOBJ]"
 #include "logger.h"
 
-#define GUID_STRING_LENGTH (37)
-BOOL GuidToWideString(_In_ LPGUID lpGuid, _Inout_ PWSTR wsGuidBuffer, _In_ SIZE_T wsGuidBufferSize);
+//
+// CAddObj constructor
+//
+CAddObj::CAddObj() : m_nRefCount(0) {}
 
 //
-// IAdd interface implementation
+// IUnknown interface implementation
 //
 HRESULT __stdcall CAddObj::QueryInterface(REFIID riid, void** ppObj)
 {
@@ -93,32 +93,4 @@ HRESULT __stdcall CAddObj::PerformAddition(long* pSum)
     LOG("SuperFast addition algorithm produced the result: %d", *pSum);
 
     return S_OK;
-}
-
-//
-// Helper functions
-//
-BOOL GuidToWideString(_In_ LPGUID lpGuid, _Inout_ PWSTR wsGuidBuffer, _In_ SIZE_T wsGuidBufferSize)
-{
-    if (!lpGuid || !wsGuidBuffer || wsGuidBufferSize <= 0)
-        return FALSE;
-
-    HRESULT hr = StringCchPrintfW(
-        wsGuidBuffer, wsGuidBufferSize, L"%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
-        lpGuid->Data1,
-        lpGuid->Data2,
-        lpGuid->Data3,
-        lpGuid->Data4[0],
-        lpGuid->Data4[1],
-        lpGuid->Data4[2],
-        lpGuid->Data4[3],
-        lpGuid->Data4[4],
-        lpGuid->Data4[5],
-        lpGuid->Data4[6],
-        lpGuid->Data4[7]
-    );
-    if (FAILED(hr))
-        return FALSE;
-
-    return TRUE;
 }
