@@ -1,6 +1,7 @@
 //
 // Exports.cpp
-// Contains the implementation of functions exported from this DLL for the COM framework
+// Contains the implementation of the exported functions that are
+// called by the COM framework to create / destroy the COM component.
 //
 #include "..\common\pch.h"
 #include "AddObj.h"
