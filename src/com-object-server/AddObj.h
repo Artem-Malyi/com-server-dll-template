@@ -27,3 +27,4 @@ private:
 };
 
 extern long g_nComObjectsInUse;
+extern HMODULE g_hModule;
