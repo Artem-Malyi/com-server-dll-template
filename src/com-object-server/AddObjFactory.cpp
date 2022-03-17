@@ -5,6 +5,7 @@
 #include "..\common\pch.h"
 #include "AddObj.h"
 #include "AddObjFactory.h"
+#include "utilities.h"
 
 #define DEBUG_LOGGER_ENABLED
 #define FILE_LOGGER_ENABLED
@@ -24,7 +25,7 @@ HRESULT __stdcall CAddObjFactory::QueryInterface(REFIID riid, void** ppvObject)
     LOG("Entering");
 
     WCHAR wsIID[GUID_STRING_LENGTH] = { 0 };
-    BOOL bRes = GuidToWideString((LPGUID)&riid, wsIID, GUID_STRING_LENGTH);
+    BOOL bRes = GuidToWideString(riid, wsIID, GUID_STRING_LENGTH);
     if (!bRes || !ppvObject)
         return E_INVALIDARG;
 
@@ -44,7 +45,10 @@ HRESULT __stdcall CAddObjFactory::QueryInterface(REFIID riid, void** ppvObject)
         return S_OK;
     }
 
-    LOG("Not supported interface: %ws", wsIID);
+    WCHAR wsIIDName[MAX_PATH] = { 0 };
+    GetInterfaceName(riid, wsIIDName, MAX_PATH);
+    LOG("!!! Not supported interface: %ws, %ws", wsIID, wsIIDName);
+
     *ppvObject = nullptr;
     return E_NOINTERFACE;
 }
@@ -81,7 +85,7 @@ HRESULT __stdcall CAddObjFactory::CreateInstance(_In_opt_ IUnknown* pUnkOuter, _
     LOG("Entering");
 
     WCHAR wsIID[GUID_STRING_LENGTH] = { 0 };
-    BOOL bRes = GuidToWideString((LPGUID)&riid, wsIID, GUID_STRING_LENGTH);
+    BOOL bRes = GuidToWideString(riid, wsIID, GUID_STRING_LENGTH);
     if (!bRes || !ppvObject)
         return E_INVALIDARG;
 

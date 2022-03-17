@@ -30,9 +30,6 @@
     #define LOG_PREFIX "DEFINE_LOG_PREFIX!"
 #endif
 
-#define GUID_STRING_LENGTH (37)
-BOOL GuidToWideString(_In_ LPGUID lpGuid, _Inout_ PWSTR wsGuidBuffer, _In_ SIZE_T wsGuidBufferSize);
-
 // Actual macros
 #ifdef FILE_LOGGER_ENABLED
     extern "C" void __cdecl __Log2File(LPSTR string2Log);

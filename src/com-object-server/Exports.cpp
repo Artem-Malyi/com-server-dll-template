@@ -7,7 +7,7 @@
 #include "AddObj.h"
 #include "AddObjFactory.h"
 #include "IAdd_i.c" // Contains the interface IIDs
-
+#include "utilities.h"
 
 #define DEBUG_LOGGER_ENABLED
 #define FILE_LOGGER_ENABLED
@@ -24,12 +24,12 @@ STDAPI DllGetClassObject(const CLSID& clsid, const IID& riid, void** ppvObject)
     LOG("Entering");
 
     WCHAR wsIID[GUID_STRING_LENGTH] = { 0 };
-    BOOL bRes = GuidToWideString((LPGUID)&riid, wsIID, GUID_STRING_LENGTH);
+    BOOL bRes = GuidToWideString(riid, wsIID, GUID_STRING_LENGTH);
     if (!bRes || !ppvObject)
         return E_INVALIDARG;
 
     WCHAR wsCLSID[GUID_STRING_LENGTH] = { 0 };
-    bRes = GuidToWideString((LPGUID)&clsid, wsCLSID, GUID_STRING_LENGTH);
+    bRes = GuidToWideString(clsid, wsCLSID, GUID_STRING_LENGTH);
     if (!bRes)
         return E_INVALIDARG;
 

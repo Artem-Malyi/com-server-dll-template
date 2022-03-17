@@ -217,22 +217,24 @@ xcopy /f /y $(IntDir)IAdd_i.c ..\common\</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\common\logger.h" />
-    <ClInclude Include="AddObj.h" />
     <ClInclude Include="..\common\framework.h" />
     <ClInclude Include="..\common\pch.h" />
+    <ClInclude Include="..\common\utilities.h" />
+    <ClInclude Include="AddObj.h" />
     <ClInclude Include="AddObjFactory.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\common\utilities.cpp" />
     <ClCompile Include="..\common\logger.cpp" />
-    <ClCompile Include="AddObj.cpp" />
-    <ClCompile Include="AddObjFactory.cpp" />
-    <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="..\common\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="AddObj.cpp" />
+    <ClCompile Include="AddObjFactory.cpp" />
+    <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Exports.cpp" />
     <ClCompile Include="Registry.cpp" />
   </ItemGroup>
