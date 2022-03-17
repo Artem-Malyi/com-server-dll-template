@@ -32,17 +32,19 @@ int main()
     }
 
     long n1 = 100, n2 = 200;
-    pFastAddAlgorithm->SetFirstNumber(n1);//"->" overloading in action
+    pFastAddAlgorithm->SetFirstNumber(n1); //"->" overloading in action
     pFastAddAlgorithm->SetSecondNumber(n2);
 
     long nSum = 0;
     hr = pFastAddAlgorithm->PerformAddition(&nSum);
+    LOG("IAdd->PerformAddition() returned 0x%08x", hr);
     if (FAILED(hr)) {
         CoUninitialize();
         return -3;
     }
 
     std::cout << "Output after adding " << n1 << " & " << n2 << " is " << nSum << "\n";
+    LOG("SuperFast addition algorithm returned: %d + %d = %d", n1, n2, nSum);
 
     CoUninitialize();
 

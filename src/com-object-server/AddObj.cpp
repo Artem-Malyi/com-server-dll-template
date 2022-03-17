@@ -8,7 +8,7 @@
 
 #define DEBUG_LOGGER_ENABLED
 #define FILE_LOGGER_ENABLED
-#define LOG_PREFIX "[COM-ADDOBJ]"
+#define LOG_PREFIX "[ADDOBJ-FASTADD]"
 #include "logger.h"
 
 //
