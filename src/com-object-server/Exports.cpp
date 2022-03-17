@@ -25,7 +25,7 @@ STDAPI DllGetClassObject(const CLSID& clsid, const IID& riid, void** ppvObject)
 
     WCHAR wsIID[GUID_STRING_LENGTH] = { 0 };
     BOOL bRes = GuidToWideString((LPGUID)&riid, wsIID, GUID_STRING_LENGTH);
-    if (!bRes || !ppvObject || !*ppvObject)
+    if (!bRes || !ppvObject)
         return E_INVALIDARG;
 
     WCHAR wsCLSID[GUID_STRING_LENGTH] = { 0 };
@@ -33,7 +33,7 @@ STDAPI DllGetClassObject(const CLSID& clsid, const IID& riid, void** ppvObject)
     if (!bRes)
         return E_INVALIDARG;
 
-    LOG("IID: %s, CLSID: %s, ppvObject: 0x%p, pvObject: 0x%p", wsIID, wsCLSID, ppvObject, *ppvObject);
+    LOG("IID: %ws, CLSID: %ws, ppvObject: 0x%p, pvObject: 0x%p", wsIID, wsCLSID, ppvObject, *ppvObject);
 
     //
     // If control reaches here then that implies that the object
@@ -54,7 +54,7 @@ STDAPI DllGetClassObject(const CLSID& clsid, const IID& riid, void** ppvObject)
     //
     // Get the requested interface
     //
-    LOG("Created CAddObjFactory instance: 0x%p, now requesting interface %s", pAddFactory, wsIID);
+    LOG("Created CAddObjFactory instance: 0x%p, now requesting interface %ws", pAddFactory, wsIID);
     return pAddFactory->QueryInterface(riid, ppvObject);
 }
 

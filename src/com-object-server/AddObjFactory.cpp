@@ -25,10 +25,10 @@ HRESULT __stdcall CAddObjFactory::QueryInterface(REFIID riid, void** ppvObject)
 
     WCHAR wsIID[GUID_STRING_LENGTH] = { 0 };
     BOOL bRes = GuidToWideString((LPGUID)&riid, wsIID, GUID_STRING_LENGTH);
-    if (!bRes || !ppvObject || !*ppvObject)
+    if (!bRes || !ppvObject)
         return E_INVALIDARG;
 
-    LOG("IID: %s, ppvObject: 0x%p, pvObject: 0x%p", wsIID, ppvObject, *ppvObject);
+    LOG("IID: %ws, ppvObject: 0x%p, pvObject: 0x%p", wsIID, ppvObject, *ppvObject);
 
     if (riid == IID_IUnknown) {
         *ppvObject = static_cast<void*>(this);
@@ -44,7 +44,7 @@ HRESULT __stdcall CAddObjFactory::QueryInterface(REFIID riid, void** ppvObject)
         return S_OK;
     }
 
-    LOG("Not supported interface: %s", wsIID);
+    LOG("Not supported interface: %ws", wsIID);
     *ppvObject = nullptr;
     return E_NOINTERFACE;
 }
@@ -82,10 +82,10 @@ HRESULT __stdcall CAddObjFactory::CreateInstance(_In_opt_ IUnknown* pUnkOuter, _
 
     WCHAR wsIID[GUID_STRING_LENGTH] = { 0 };
     BOOL bRes = GuidToWideString((LPGUID)&riid, wsIID, GUID_STRING_LENGTH);
-    if (!bRes || !ppvObject || !*ppvObject)
+    if (!bRes || !ppvObject)
         return E_INVALIDARG;
 
-    LOG("IID: %s, pUnkOuter: 0x%p, ppvObject: 0x%p, pvObject: 0x%p", wsIID, pUnkOuter, ppvObject, *ppvObject);
+    LOG("IID: %ws, pUnkOuter: 0x%p, ppvObject: 0x%p, pvObject: 0x%p", wsIID, pUnkOuter, ppvObject, *ppvObject);
 
     if (pUnkOuter != NULL)
         return CLASS_E_NOAGGREGATION; // Cannot aggregate
@@ -100,7 +100,7 @@ HRESULT __stdcall CAddObjFactory::CreateInstance(_In_opt_ IUnknown* pUnkOuter, _
     //
     // Get the requested interface
     //
-    LOG("Created CAddObj instance: 0x%p, now requesting interface %s", pObject, wsIID);
+    LOG("Created CAddObj instance: 0x%p, now requesting interface %ws", pObject, wsIID);
     return pObject->QueryInterface(riid, ppvObject);
 }
 

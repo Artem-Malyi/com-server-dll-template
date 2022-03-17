@@ -1,5 +1,5 @@
 # COM object template
 
-Inspired by: 
+Inspired by:
  - https://www.codeguru.com/soap/step-by-step-com-tutorial/
  - https://progtutorials.tripod.com/COM.htm
