@@ -175,6 +175,9 @@ xcopy /f /y $(IntDir)IAdd_i.c ..\common\</Command>
     <Midl>
       <OutputDirectory>$(IntDir)</OutputDirectory>
       <TypeLibraryName />
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <ValidateAllParameters>true</ValidateAllParameters>
     </Midl>
     <PostBuildEvent>
       <Command>xcopy /f /y $(IntDir)IAdd_h.h ..\common\
@@ -238,6 +241,9 @@ xcopy /f /y $(IntDir)IAdd_i.c ..\common\</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="Exports.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

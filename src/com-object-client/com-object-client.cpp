@@ -46,6 +46,11 @@ int main()
     std::cout << "Output after adding " << n1 << " & " << n2 << " is " << nSum << "\n";
     LOG("SuperFast addition algorithm returned: %d + %d = %d", n1, n2, nSum);
 
+    //
+    // Release the reference to the COM object when we're done
+    //
+    pFastAddAlgorithm->Release();
+
     CoUninitialize();
 
     return 0;
