@@ -39,6 +39,8 @@ int main()
 #ifdef BUILD_CLIENT_WITH_TYPELIB
 int testComServer()
 {
+    LOG("Entering");
+
     HRESULT hr = CoInitialize(NULL);
     if (FAILED(hr))
         return -1;
@@ -53,6 +55,7 @@ int testComServer()
         // method invocations to the internal raw interface pointer.
         //
         hr = pFastAddAlgorithm.CreateInstance("SuperFast.AddObj");
+        LOG("CoCreateInstance() returned 0x%08x", hr);
         if (FAILED(hr))
             return -2;
 
@@ -76,6 +79,8 @@ int testComServer()
 #ifdef BUILD_CLIENT_WITH_IDL_HEADERS
 int testComServer()
 {
+    LOG("Entering");
+
     HRESULT hr = CoInitialize(NULL);
     if (FAILED(hr))
         return -1;
