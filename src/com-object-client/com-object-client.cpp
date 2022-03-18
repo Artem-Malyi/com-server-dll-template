@@ -13,6 +13,7 @@
 #include "logger.h"
 
 int testComServer();
+bool errorDescription(DWORD dwErrorCode, PWSTR wszMsgBuff, DWORD wsMessageBufferSize);
 
 #ifdef BUILD_CLIENT_WITH_IDL_HEADERS
 //
@@ -28,8 +29,20 @@ int testComServer();
 // The #import directive generates two files (.tlh/.tli) in the output folders.
 //
 //#import "IAdd.tlb"
-#import "com-object-server64d.dll"
+#ifdef _WIN64
+    #ifdef _DEBUG
+        #import "com-object-server64d.dll"
+    #else
+        #import "com-object-server64.dll"
+    #endif
+#else
+    #ifdef _DEBUG
+        #import "com-object-server32d.dll"
+    #else
+        #import "com-object-server32.dll"
+    #endif
 #endif
+#endif // BUILD_CLIENT_WITH_TYPELIB
 
 int main()
 {
@@ -45,6 +58,8 @@ int testComServer()
     if (FAILED(hr))
         return -1;
 
+    WCHAR wsMessageBuffer[512] = { 0 };
+
     {
         SuperFastMathLib::IAddPtr pFastAddAlgorithm;
         //
@@ -55,7 +70,8 @@ int testComServer()
         // method invocations to the internal raw interface pointer.
         //
         hr = pFastAddAlgorithm.CreateInstance("SuperFast.AddObj");
-        LOG("CoCreateInstance() returned 0x%08x", hr);
+        errorDescription(hr, wsMessageBuffer, _countof(wsMessageBuffer));
+        LOG("CoCreateInstance() returned 0x%08x: %ws", hr, wsMessageBuffer);
         if (FAILED(hr))
             return -2;
 
@@ -85,9 +101,12 @@ int testComServer()
     if (FAILED(hr))
         return -1;
 
+    WCHAR wsMessageBuffer[512] = { 0 };
+
     IAdd* pFastAddAlgorithm = nullptr;
     hr = CoCreateInstance(CLSID_AddObject, NULL, CLSCTX_INPROC_SERVER, IID_IAdd, (void**)&pFastAddAlgorithm);
-    LOG("CoCreateInstance() returned 0x%08x", hr);
+    errorDescription(hr, wsMessageBuffer, _countof(wsMessageBuffer));
+    LOG("CoCreateInstance() returned 0x%08x: %ws", hr, wsMessageBuffer);
     if (FAILED(hr)) {
         CoUninitialize();
         return -2;
@@ -118,3 +137,40 @@ int testComServer()
     return 0;
 }
 #endif
+
+bool errorDescription(DWORD dwErrorCode, PWSTR wsMessageBuffer, DWORD wsMessageBufferSize)
+{
+    // Try to get the message from the system errors list.
+    DWORD dwChars = FormatMessage(
+        FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+        NULL,
+        dwErrorCode,
+        0,
+        wsMessageBuffer,
+        wsMessageBufferSize,
+        NULL
+    );
+    if (0 == dwChars)
+    {
+        // The error code did not exist in the system errors list.
+        // Try Ntdsbmsg.dll for the error code.
+        HINSTANCE hInst = LoadLibrary(L"Ntdsbmsg.dll");
+        if (!hInst)
+            return false;
+
+        // Try getting message text from ntdsbmsg.
+        dwChars = FormatMessage(
+            FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_IGNORE_INSERTS,
+            hInst,
+            dwErrorCode,
+            0,
+            wsMessageBuffer,
+            wsMessageBufferSize,
+            NULL
+        );
+
+        FreeLibrary(hInst);
+    }
+
+    return (0 == dwChars);
+}
