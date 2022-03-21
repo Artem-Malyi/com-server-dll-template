@@ -1,4 +1,4 @@
-# COM object template
+# COM inproc server (dll) template
 
 Minimalistic solution for the classic COM InProc server implementing IUnknown and CLI client written without ATL and only with Win32 API
 
