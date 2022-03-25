@@ -1,8 +1,9 @@
 //
-// Utilities.cpp
+// utilities.cpp
 // Contains different helper functions
 //
 #include "..\common\pch.h"
+#include "utilities.h"
 
 #define DEBUG_LOGGER_ENABLED
 #define FILE_LOGGER_ENABLED
@@ -50,7 +51,8 @@ BOOL GetInterfaceName(_In_ REFIID riid, _Inout_ PWSTR wsGuidBuffer, _In_ SIZE_T 
     if (!wsGuidBuffer || wsGuidBufferSize <= 0)
         goto done;
 
-    CoInitialize(NULL);
+    // Assuming the caller has already initialized the COM library
+    // CoInitialize(NULL);
 
     hr = StringFromIID(riid, &lpszGuid);
     if (FAILED(hr))
@@ -74,7 +76,7 @@ done:
     if (lpszGuid != NULL)
         CoTaskMemFree(lpszGuid);
 
-    CoUninitialize();
+    // CoUninitialize();
 
     LOG("Exiting with 0x%08x", lRet);
 

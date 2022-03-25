@@ -12,17 +12,22 @@
 #define LOG_PREFIX "[ADDOBJ-FASTADD]"
 #include "logger.h"
 
+extern ULONG g_ObjectCount;
+
 //
 // CAddObj constructor/destructor
 //
-CAddObj::CAddObj() : m_nRefCount(0)
+CAddObj::CAddObj()
+    : m_refCount(0)
 {
-    InterlockedIncrement(&g_nComObjectsInUse);
+    LOG("Constructing instance: 0x%p", this);
+    InterlockedIncrement(&g_ObjectCount);
 }
 
 CAddObj::~CAddObj()
 {
-    InterlockedDecrement(&g_nComObjectsInUse);
+    InterlockedDecrement(&g_ObjectCount);
+    LOG("Destructing instance: 0x%p", this);
 }
 
 //
@@ -37,44 +42,44 @@ HRESULT __stdcall CAddObj::QueryInterface(REFIID riid, void** ppvObject)
     if (!bRes || !ppvObject)
         return E_INVALIDARG;
 
-    LOG("IID: %ws, ppvObject: 0x%p, pvObject: 0x%p", wsIID, ppvObject, *ppvObject);
+    WCHAR wsIIDName[MAX_PATH] = { 0 };
+    GetInterfaceName(riid, wsIIDName, MAX_PATH);
+    LOG("IID: %ws [%ws], ppvObject: 0x%p", wsIID, wsIIDName, ppvObject);
 
     if (riid == IID_IUnknown) {
         *ppvObject = static_cast<void*>(this);
         AddRef();
-        LOG("Query for IUnknown, refCount: %d", m_nRefCount);
+        LOG("Query for IUnknown, refCount: %d", m_refCount);
         return S_OK;
     }
 
     if (riid == IID_IAdd) {
         *ppvObject = static_cast<void*>(this);
         AddRef();
-        LOG("Query for IAdd, refCount: %d", m_nRefCount);
+        LOG("Query for IAdd, refCount: %d", m_refCount);
         return S_OK;
     }
 
-    WCHAR wsIIDName[MAX_PATH] = { 0 };
-    GetInterfaceName(riid, wsIIDName, MAX_PATH);
-    LOG("!!! Not supported interface: %ws, %ws", wsIID, wsIIDName);
+    LOG("WARNING! Not supported interface: %ws [%ws], refCount: %d", wsIID, wsIIDName, m_refCount);
 
     *ppvObject = nullptr;
     return E_NOINTERFACE;
 }
 
 ULONG __stdcall CAddObj::AddRef() {
-    LOG("On instance 0x%p", this);
-    return InterlockedIncrement(&m_nRefCount);
+    ULONG refCount = InterlockedIncrement(&m_refCount);
+    LOG("On instance 0x%p, refCount: %d", this, refCount);
+    return refCount;
 }
 
 ULONG __stdcall CAddObj::Release() {
-    LOG("On instance 0x%p", this);
-    long nRefCount = 0;
-    nRefCount = InterlockedDecrement(&m_nRefCount);
-    if (0 == nRefCount) {
+    ULONG refCount = InterlockedDecrement(&m_refCount);
+    LOG("On instance 0x%p, refCount: %d", this, refCount);
+    if (0 == refCount) {
         LOG("Cleanup instance 0x%p", this);
         delete this;
     }
-    return nRefCount;
+    return refCount;
 }
 
 //

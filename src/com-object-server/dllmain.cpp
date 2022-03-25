@@ -6,7 +6,10 @@
 #define LOG_PREFIX "[ADDOBJ-DLLMAIN]"
 #include "logger.h"
 
-long g_nComObjectsInUse = 0;
+// Global COM server variables.
+ULONG g_LockCount = 0;		// Represents the number of COM server locks.
+ULONG g_ObjectCount = 0;	// Represents the number of living COM objects.
+
 HMODULE g_hModule = nullptr;
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
@@ -16,16 +19,16 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
     {
     case DLL_PROCESS_ATTACH:
         g_hModule = hModule;
-        LOG("DLL_PROCESS_ATTACH: g_nComObjectsInUse: 0x%08x, g_hModule: 0x%p", g_nComObjectsInUse, g_hModule);
+        LOG("DLL_PROCESS_ATTACH: g_ObjectCount: 0x%08x, g_hModule: 0x%p", g_ObjectCount, g_hModule);
         break;
     case DLL_THREAD_ATTACH:
-        LOG("DLL_THREAD_ATTACH: g_nComObjectsInUse: 0x%08x, g_hModule: 0x%p", g_nComObjectsInUse, g_hModule);
+        LOG("DLL_THREAD_ATTACH: g_ObjectCount: 0x%08x, g_hModule: 0x%p", g_ObjectCount, g_hModule);
         break;
     case DLL_THREAD_DETACH:
-        LOG("DLL_THREAD_DETACH: g_nComObjectsInUse: 0x%08x, g_hModule: 0x%p", g_nComObjectsInUse, g_hModule);
+        LOG("DLL_THREAD_DETACH: g_ObjectCount: 0x%08x, g_hModule: 0x%p", g_ObjectCount, g_hModule);
         break;
     case DLL_PROCESS_DETACH:
-        LOG("DLL_PROCESS_DETACH: g_nComObjectsInUse: 0x%08x, g_hModule: 0x%p", g_nComObjectsInUse, g_hModule);
+        LOG("DLL_PROCESS_DETACH: g_ObjectCount: 0x%08x, g_hModule: 0x%p", g_ObjectCount, g_hModule);
         break;
     }
     return TRUE;

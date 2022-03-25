@@ -1,7 +1,7 @@
 //
-// Registry.cpp
+// registry.cpp
 // Contains the implementation of the exported functions that are
-// called by regsvr32.exe to register / unregister the COM component.
+// called by regsvr32.exe to [un]register the COM component.
 //
 #include "..\common\pch.h"
 #include "AddObj.h"
@@ -13,6 +13,8 @@
 #define FILE_LOGGER_ENABLED
 #define LOG_PREFIX "[ADDOBJ-EXPORTS]"
 #include "logger.h"
+
+extern HMODULE g_hModule;
 
 static const TCHAR g_szClassDescription[] = TEXT("SuperFast Addition COM Object");
 static const TCHAR g_szProgId[] = TEXT("SuperFast.AddObj");
@@ -37,6 +39,9 @@ STDAPI AddProgIdEntry(LPOLESTR szClassId)
     LONG lRet = ERROR_SUCCESS;
     TCHAR szProgIdRegKey[MAX_PATH] = { 0 };
     HKEY hProgIdKey = nullptr;
+
+    if (!szClassId)
+        goto done;
 
     hr = StringCbPrintf(szProgIdRegKey, sizeof(szProgIdRegKey), TEXT("Software\\Classes\\%s\\CLSID"), g_szProgId);
     if (FAILED(hr))
@@ -63,6 +68,9 @@ STDAPI AddClassIdEntry(LPOLESTR szClassId, LPOLESTR szTypelibId, LPTSTR szFileNa
     LONG lRet = ERROR_SUCCESS;
     TCHAR szClassIdRegKey[MAX_PATH] = { 0 };
     HKEY hClsidKey = nullptr, hInProcKey = nullptr, hTypelibKey = nullptr, hVersionKey = nullptr;
+
+    if (!szClassId || !szTypelibId || !szFileName)
+        goto done;
 
     hr = StringCbPrintf(szClassIdRegKey, sizeof(szClassIdRegKey), TEXT("Software\\Classes\\CLSID\\%s"), szClassId);
     if (FAILED(hr))
@@ -128,6 +136,9 @@ STDAPI AddTypeLibIdEntry(LPOLESTR szTypelibId)
     TCHAR szTypelib10RegKey[MAX_PATH] = { 0 };
     HKEY hTypelibIdKey = nullptr, hTypelib10Key = nullptr;
 
+    if (!szTypelibId)
+        goto done;
+
     hr = StringCbPrintf(szTypelibIdRegKey, sizeof(szTypelibIdRegKey), TEXT("Software\\Classes\\TypeLib\\%s"), szTypelibId);
     if (FAILED(hr))
         goto done;
@@ -165,6 +176,9 @@ STDAPI AddInterfaceIdEntry(LPOLESTR szInterfaceId, LPOLESTR szTypelibId)
     TCHAR szInterfaceIdRegKey[MAX_PATH] = { 0 };
     TCHAR szTypelibRegKey[MAX_PATH] = { 0 };
     HKEY hInterfaceIdKey = nullptr, hTypelibKey = nullptr;
+
+    if (!szInterfaceId || !szTypelibId)
+        goto done;
 
     hr = StringCbPrintf(szInterfaceIdRegKey, sizeof(szInterfaceIdRegKey), TEXT("Software\\Classes\\Interface\\%s"), szInterfaceId);
     if (FAILED(hr))

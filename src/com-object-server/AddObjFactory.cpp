@@ -12,10 +12,23 @@
 #define LOG_PREFIX "[ADDOBJ-FACTORY]"
 #include "logger.h"
 
+extern ULONG g_ObjectCount;
+extern ULONG g_LockCount;
+
 //
-// CAddObjFactory constructor
+// CAddObjFactory ctor / dtor
 //
-CAddObjFactory::CAddObjFactory() : m_nRefCount(0) {}
+CAddObjFactory::CAddObjFactory() : m_refCount(0)
+{
+    LOG("Constructing instance: 0x%p", this);
+    InterlockedIncrement(&g_ObjectCount);
+}
+
+CAddObjFactory::~CAddObjFactory()
+{
+    InterlockedDecrement(&g_ObjectCount);
+    LOG("Destructing instance: 0x%p", this);
+}
 
 //
 // IUnknown interface implementation
@@ -29,44 +42,44 @@ HRESULT __stdcall CAddObjFactory::QueryInterface(REFIID riid, void** ppvObject)
     if (!bRes || !ppvObject)
         return E_INVALIDARG;
 
-    LOG("IID: %ws, ppvObject: 0x%p, pvObject: 0x%p", wsIID, ppvObject, *ppvObject);
+    WCHAR wsIIDName[MAX_PATH] = { 0 };
+    GetInterfaceName(riid, wsIIDName, MAX_PATH);
+    LOG("IID: %ws [%ws], ppvObject: 0x%p", wsIID, wsIIDName, ppvObject);
 
     if (riid == IID_IUnknown) {
         *ppvObject = static_cast<void*>(this);
         AddRef();
-        LOG("Query for IUnknown, refCount: %d", m_nRefCount);
+        LOG("Query for IUnknown, refCount: %d", m_refCount);
         return S_OK;
     }
 
     if (riid == IID_IClassFactory) {
         *ppvObject = static_cast<void*>(this);
         AddRef();
-        LOG("Query for IClassFactory, refCount: %d", m_nRefCount);
+        LOG("Query for IClassFactory, refCount: %d", m_refCount);
         return S_OK;
     }
 
-    WCHAR wsIIDName[MAX_PATH] = { 0 };
-    GetInterfaceName(riid, wsIIDName, MAX_PATH);
-    LOG("!!! Not supported interface: %ws, %ws", wsIID, wsIIDName);
+    LOG("WARNING! Not supported interface: %ws [%ws], refCount: %d", wsIID, wsIIDName, m_refCount);
 
     *ppvObject = nullptr;
     return E_NOINTERFACE;
 }
 
 ULONG __stdcall CAddObjFactory::AddRef() {
-    LOG("On instance 0x%p", this);
-    return InterlockedIncrement(&m_nRefCount);
+    ULONG refCount = InterlockedIncrement(&m_refCount);
+    LOG("On instance 0x%p, refCount: %d", this, refCount);
+    return refCount;
 }
 
 ULONG __stdcall CAddObjFactory::Release() {
-    LOG("On instance 0x%p", this);
-    long nRefCount = 0;
-    nRefCount = InterlockedDecrement(&m_nRefCount);
-    if (0 == nRefCount) {
+    ULONG refCount = InterlockedDecrement(&m_refCount);
+    LOG("On instance 0x%p, refCount: %d", this, refCount);
+    if (0 == refCount) {
         LOG("Cleanup instance 0x%p", this);
         delete this;
     }
-    return nRefCount;
+    return refCount;
 }
 
 //
@@ -110,6 +123,18 @@ HRESULT __stdcall CAddObjFactory::CreateInstance(_In_opt_ IUnknown* pUnkOuter, _
 
 HRESULT __stdcall CAddObjFactory::LockServer(_In_ BOOL fLock)
 {
-    LOG("Not implemented");
-    return E_NOTIMPL;
+    LOG("fLock: %d", fLock);
+
+    if (fLock) {
+        long lockCount = InterlockedDecrement(&g_LockCount);
+
+        if (0 == lockCount) {
+            LOG("PostQuitMessage(EXIT_SUCCESS)");
+            PostQuitMessage(EXIT_SUCCESS);
+        }
+    }
+    else
+        InterlockedDecrement(&g_LockCount);
+
+    return S_OK;
 }

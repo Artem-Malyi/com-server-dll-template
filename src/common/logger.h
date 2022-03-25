@@ -44,13 +44,7 @@
     #define LOG_TO_OUTPUT(sText)
 #endif
 
-#ifdef _WIN64
-    #define PTR_WIDTH 16
-#else
-    #define PTR_WIDTH 8
-#endif
-
-#define OUTPUT_BUFFER_SIZE 1024
+#define OUTPUT_BUFFER_SIZE 4096
 
 #if defined DEBUG_LOGGER_ENABLED || defined FILE_LOGGER_ENABLED
     #define LOG(fmt, ...)                                                                                                   \

@@ -5,3 +5,4 @@
 #include <windows.h>
 #include <winioctl.h>
 #include <strsafe.h>
+#include <amsi.h>

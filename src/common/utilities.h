@@ -1,5 +1,5 @@
 //
-// Utilities.h
+// utilities.h
 // Contains declarations for the helper functions
 //
 #pragma once
