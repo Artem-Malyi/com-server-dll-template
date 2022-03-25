@@ -1,4 +1,4 @@
-// com-object-client.cpp : This file contains the 'main' function. Program execution begins and ends there.
+// testclient.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
 #define BUILD_CLIENT_WITH_TYPELIB

@@ -239,17 +239,17 @@ xcopy /f /y $(IntDir)IAdd_i.c ..\common\</Command>
     <ClCompile Include="AddObj.cpp" />
     <ClCompile Include="AddObjFactory.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="Exports.cpp" />
-    <ClCompile Include="Registry.cpp" />
+    <ClCompile Include="exports.cpp" />
+    <ClCompile Include="registry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="IAdd.idl" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Exports.def" />
+    <None Include="exports.def" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Resource.rc" />
+    <ResourceCompile Include="resource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -24,6 +24,7 @@
     <ProjectGuid>{89de9b67-2310-415c-9171-d07a067ae4a5}</ProjectGuid>
     <RootNamespace>comobjectclient</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>testclient</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -156,7 +157,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\common\logger.cpp" />
-    <ClCompile Include="com-object-client.cpp" />
+    <ClCompile Include="testclient.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\logger.h" />
